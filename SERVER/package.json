@@ -1,0 +1,35 @@
+{
+  "name": "backend_expense_manager_app",
+  "version": "1.0.0",
+  "description": "Backend for expense manager app",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon index.js"
+  },
+  "author": "Shivanshu Kashyap",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^5.1.1",
+    "body-parser": "^1.20.3",
+    "cashfree-pg": "^4.3.10",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "ejs": "^3.1.10",
+    "express": "^4.21.2",
+    "http": "^0.0.1-security",
+    "json2csv": "^6.0.0-alpha.2",
+    "jsonwebtoken": "^9.0.2",
+    "mongodb": "^6.17.0",
+    "mongoose": "^8.16.3",
+    "mysql2": "^3.12.0",
+    "nodemailer": "^6.10.0",
+    "path": "^0.12.7",
+    "postmark": "^4.0.5",
+    "sequelize": "^6.37.5",
+    "uuid": "^11.1.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.9"
+  }
+}
