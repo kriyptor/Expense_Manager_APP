@@ -14,7 +14,7 @@ const App = () => {
   const [token, setToken] = useState(null);
   const [isPremium, setIsPremium] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  const apiEndPoint = `http://localhost:3000`/* `http://3.108.236.167` */
+  const apiEndPoint = `http://13.232.30.37`/* `http://3.108.236.167` */
 
   const fetchUserPremiumStatus = async (token) => {
     try {

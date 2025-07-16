@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { Container, Row, Col, Card, Form, Button, Alert, Tabs, Tab } from 'react-bootstrap';
  
 const AuthComponent = ({ handleLogin }) => {
-  const apiEndPoint = 'http://localhost:3000'
+  const apiEndPoint = 'http://13.232.30.37'
   // State for different forms
   const [key, setKey] = useState('signin');
   

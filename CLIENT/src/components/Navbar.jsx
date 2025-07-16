@@ -10,7 +10,7 @@ const ExpenseManagerNavbar = ({ isPremium, onLogout, setIsPremium }) => {
   const [show, setShow] = useState(false);
   const [orderId, setOrderId] = useState("")
   const [cashfree, setCashfree] = useState(null);
-  const apiEndPoint = 'http://localhost:3000'
+  const apiEndPoint = 'http://13.232.30.37'
 
   const [token, setToken] = useState(null);
   

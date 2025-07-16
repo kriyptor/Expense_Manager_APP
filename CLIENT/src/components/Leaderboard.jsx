@@ -11,7 +11,7 @@ import {
 function Leaderboard({ token }) {
   const [leaderboard, setLeaderboard] = useState([]);
   const [loading, setLoading] = useState(true);
- const apiEndPoint = 'http://localhost:3000'
+ const apiEndPoint = 'http://13.232.30.37'
 
 
   const fetchLeaderboard = async () => {

@@ -11,7 +11,7 @@ import {
 } from "react-bootstrap";
 
 const ExpenseFilter = ({ isPremium , token }) => {
-  const apiEndPoint = 'http://localhost:3000'
+  const apiEndPoint = 'http://13.232.30.37'
  
   // State for form inputs
   const [filterType, setFilterType] = useState("daily"); // daily, monthly, yearly

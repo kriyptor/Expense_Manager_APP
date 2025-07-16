@@ -14,7 +14,7 @@ import {
 
 
 const HomePage = () => {
- const apiEndPoint = 'http://localhost:3000'
+ const apiEndPoint = 'http://13.232.30.37'
   // State for expense form
   const [expenseForm, setExpenseForm] = useState({
     amount: "",
