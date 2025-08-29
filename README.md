@@ -2,6 +2,10 @@
 
 A full-stack expense manager application built with the MERN stack (MongoDB, Express, React, Node.js). This app allows users to track expenses, view reports, download CSVs, and unlock premium features like leaderboards.
 
+### My Project
+
+Check out this demo video: [Watch the demo video on Google Drive](https://drive.google.com/file/d/1zVoc4ooJDnVZZ9eoOdo9Jd6bAWPbsAWS/view?usp=sharing)
+
 ## Features
 
 - **User Authentication:** Sign up, sign in, and password reset via email.
