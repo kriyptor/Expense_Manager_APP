@@ -20,8 +20,6 @@ const PaymentSchema = new mongoose.Schema({
   timestamps: true // Automatically adds createdAt and updatedAt
 });
 
-// Index for quick lookup by userId
-//PaymentSchema.index({ userId: 1 });
 
 const Payments = mongoose.model('Payment', PaymentSchema);
 

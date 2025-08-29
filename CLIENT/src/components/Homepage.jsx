@@ -12,9 +12,9 @@ import {
   Alert
 } from "react-bootstrap";
 
-
 const HomePage = () => {
- const apiEndPoint = 'http://13.232.30.37'
+  const apiEndPoint = 'http://13.232.30.37';
+
   // State for expense form
   const [expenseForm, setExpenseForm] = useState({
     amount: "",
@@ -36,27 +36,29 @@ const HomePage = () => {
     hasPrevPage: false
   });
 
-  // State for custom items per page input
-  const [customItemsPerPage, setCustomItemsPerPage] = useState(5);
+  // State for custom items per page input, loaded from localStorage
+  const [customItemsPerPage, setCustomItemsPerPage] = useState(() => {
+    const saved = localStorage.getItem("itemsPerPage");
+    return saved ? parseInt(saved, 10) : 5;
+  });
+
+  // State for input error handling
+  const [inputError, setInputError] = useState(null);
 
   // State for loading and error handling
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const fetchExpenses = async (page = 1, itemsPerPage = 5) => {
+  const fetchExpenses = async (page = 1, itemsPerPage = customItemsPerPage) => {
     try {
       setLoading(true);
       const response = await axios.get(`${apiEndPoint}/expense/user-expense`, {
-        params: {
-          page,
-          limit: itemsPerPage
-        },
-        headers: { "Authorization": token } // Correct format inside the config object
+        params: { page, limit: itemsPerPage },
+        headers: { Authorization: token }
       });
       
       setExpenses(response.data.data);
       setPaginationInfo(response.data.pagination);
-      setCustomItemsPerPage(response.data.pagination.itemsPerPage);
       setError(null);
     } catch (error) {
       console.error("Error fetching expenses:", error);
@@ -64,19 +66,15 @@ const HomePage = () => {
     } finally {
       setLoading(false);
     }
-  }; 
-  // Initial data load on component mount
+  };
+
   useEffect(() => {
-    // Check for userId in localStorage
     const storedToken = localStorage.getItem("token");
-    
     if (!storedToken) {
-      window.location.href = "/login"; 
+      window.location.href = "/login";
       return;
     }
-
     setToken(storedToken);
-    
   }, []);
 
   useEffect(() => {
@@ -85,36 +83,22 @@ const HomePage = () => {
     }
   }, [token]);
 
-  // Handle form input changes
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setExpenseForm({ ...expenseForm, [name]: value });
   };
 
-  // Handle form submission
   const handleSubmit = async (e) => {
-    e.preventDefault();      
-
-    // Prepare the new expense object
-    const newExpense = {
-      ...expenseForm,
-    };
-
-    console.log(newExpense)
-
+    e.preventDefault();
+    const newExpense = { ...expenseForm };
     const storedToken = localStorage.getItem("token");
-
     try {
       setLoading(true);
-      // Send the expense data to the server
-      await axios.post(`${apiEndPoint}/expense/add-expense`, newExpense, { headers: {"Authorization" : storedToken} });
-      
-      // Reset form after successful submission
-      setExpenseForm({ amount: "", category: "food", description: "", date: "" });
-      
-      // Refresh the expense list to show the new entry
+      await axios.post(`${apiEndPoint}/expense/add-expense`, newExpense, {
+        headers: { Authorization: storedToken }
+      });
+      setExpenseForm({ amount: "", category: "Food", description: "", date: "" });
       fetchExpenses(paginationInfo.currentPage, customItemsPerPage);
-      
     } catch (error) {
       console.error("Error adding expense:", error);
       setError("Failed to add expense. Please try again.");
@@ -122,23 +106,14 @@ const HomePage = () => {
     }
   };
 
-  // Handle delete expense - updated to send both userId and expenseId
   const handleDelete = async (expenseId) => {
     try {
       setLoading(true);
-      // Delete the expense from the server with the proper payload
-      console.log(expenseId)
       await axios.delete(`${apiEndPoint}/expense/delete-expense`, {
-        data: {
-          expenseId: expenseId
-        },
-        headers: { "Authorization": token } 
+        data: { expenseId },
+        headers: { Authorization: token }
       });
-      
-      
-      // Refresh the expense list after deletion
       fetchExpenses(paginationInfo.currentPage, customItemsPerPage);
-      
     } catch (error) {
       console.error("Error deleting expense:", error);
       setError("Failed to delete expense. Please try again.");
@@ -146,30 +121,31 @@ const HomePage = () => {
     }
   };
 
-  // Handle page change
   const handlePageChange = (pageNumber) => {
     fetchExpenses(pageNumber, customItemsPerPage);
   };
 
-  // Handle rows per page change
   const handleItemsPerPageChange = (e) => {
-    const value = parseInt(e.target.value, 10);
-    setCustomItemsPerPage(value);
+    const value = e.target.value;
+    setCustomItemsPerPage(value === "" ? "" : parseInt(value, 10));
+    setInputError(null);
   };
 
-  // Apply the customItemsPerPage when the user submits
   const applyCustomPagination = () => {
-    if (customItemsPerPage > 0) {
-      fetchExpenses(1, customItemsPerPage); // Reset to first page when changing items per page
+    const itemsPerPage = parseInt(customItemsPerPage, 10);
+    if (isNaN(itemsPerPage) || itemsPerPage <= 0) {
+      setInputError("Please enter a positive integer for rows per page.");
+      return;
     }
+    localStorage.setItem("itemsPerPage", itemsPerPage);
+    fetchExpenses(1, itemsPerPage);
   };
 
   return (
     <Container className="mt-5">
-      {/* Error Alert */}
       {error && <Alert variant="danger">{error}</Alert>}
+      {inputError && <Alert variant="warning">{inputError}</Alert>}
       
-      {/* Expense Form */}
       <Row className="mb-4">
         <Col>
           <h3>Add Expense</h3>
@@ -245,12 +221,10 @@ const HomePage = () => {
         </Col>
       </Row>
 
-      {/* Expense Table */}
       <Row>
         <Col>
           <h3>Expense List</h3>
           {loading && <p>Loading expenses...</p>}
-          
           {!loading && expenses.length === 0 ? (
             <p>No expenses found. Add your first expense using the form above.</p>
           ) : (
@@ -287,7 +261,6 @@ const HomePage = () => {
                 </tbody>
               </Table>
 
-              {/* Pagination Controls with Apply Button */}
               <Row className="align-items-center">
                 <Col md={6}>
                   <InputGroup style={{ width: "300px" }}>

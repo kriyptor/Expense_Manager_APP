@@ -44,12 +44,6 @@ const ExpenseSchema = new mongoose.Schema({
   timestamps: true // Automatically adds createdAt and updatedAt
 });
 
-// Indexes for efficient querying:
-//ExpenseSchema.index({ userId: 1 }); // To quickly find all expenses for a user
-/* ExpenseSchema.index({ date: -1 });  // To sort expenses by date (descending)
-ExpenseSchema.index({ category: 1 }); // To filter by category
-ExpenseSchema.index({ userId: 1, year: -1, month: -1 }); // For monthly/yearly reports per user */
-
 const Expense = mongoose.model('Expense', ExpenseSchema);
 
 module.exports = { Expense };

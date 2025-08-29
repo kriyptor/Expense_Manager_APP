@@ -106,7 +106,6 @@ exports.verifyPayment = async (req, res) => {
             );
 
             if (!updatePayment) {
-                //await transaction.rollback();
                 return res.status(400).json({ success: false, error: "Failed to update payment" });
             }
 
@@ -118,7 +117,6 @@ exports.verifyPayment = async (req, res) => {
             );
 
             if (!updatedUser) {
-                //await transaction.rollback();
                 return res.status(400).json({ success: false, error: "Failed to update user" });
             }
         }

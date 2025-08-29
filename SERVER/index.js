@@ -27,10 +27,6 @@ app.use(bodyParser.json());
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 
-app.get('/hi', (req, res) => {
-  res.send("Hello from the server!");
-});
-
 app.use('/user', userRouter);
 app.use('/expense', expenseRouter);
 app.use('/premium', premiumRouter);
@@ -38,7 +34,7 @@ app.use('/password', passwordRouter);
 app.use('/payment', paymentRouter);
 
 
-//sync the database
+//connect the database
 connectToDB()
   .then(() => {
     console.log(`Connected with DB!`);

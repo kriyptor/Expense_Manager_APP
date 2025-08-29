@@ -44,9 +44,6 @@ exports.getAllExpense = async (req, res) => {
 };
 
 exports.createExpense = async (req, res) => {
-  /* const session = await mongoose.startSession();
-  session.startTransaction(); */
-
   try {
     const userId = req.user.id;
     const { amount, category, description, date } = req.body;
@@ -64,24 +61,18 @@ exports.createExpense = async (req, res) => {
       userId,
     });
 
-    await newExpense.save(/* { session } */);
+    await newExpense.save();
 
     await User.findByIdAndUpdate(
       userId,
       { $inc: { totalExpense: amount } },
-      /* { session } */
     );
-
-    /* await session.commitTransaction();
-    session.endSession(); */
 
     res.status(201).json({
       success: true,
       data: newExpense,
     });
   } catch (error) {
-   /*  await session.abortTransaction();
-    await session.endSession(); */
     console.log(`This is the error :${error}`);
 
     res.status(500).json({
@@ -92,21 +83,16 @@ exports.createExpense = async (req, res) => {
 };
 
 exports.deleteExpense = async (req, res) => {
-  /* const session = await mongoose.startSession();
-  session.startTransaction(); */
   try {
     const userId = req.user._id;
 
     const { expenseId } = req.body;
 
-    const expenseAmount = await Expense.findById(expenseId/* , { session } */).select(
+    const expenseAmount = await Expense.findById(expenseId).select(
       "amount"
     );
 
     if (!expenseAmount) {
-      // If the expense doesn't exist, we can't delete it or update user's totalExpense
-      /* await session.abortTransaction();
-      session.endSession(); */
       return res.status(404).json({
         success: false,
         error: "Expense not found.",
@@ -115,24 +101,18 @@ exports.deleteExpense = async (req, res) => {
 
     const amountToDecrement = expenseAmount.amount;
 
-    const deletedExpense = await Expense.findByIdAndDelete(expenseId/* , {session} */);
+    const deletedExpense = await Expense.findByIdAndDelete(expenseId);
 
     await User.findByIdAndUpdate(
       userId,
       { $inc: { totalExpense: Number(amountToDecrement) * -1 } },
-      /* { session } */
     );
-
-    /* await session.commitTransaction();
-    session.endSession(); */
 
     res.status(200).json({
       success: true,
       data: deletedExpense,
     });
   } catch (error) {
-   /*  await session.abortTransaction();
-    session.endSession(); // rollback the transaction */
 
     console.log(`This is the error :${error}`);
     res.status(500).json({
